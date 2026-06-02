@@ -1,6 +1,9 @@
 Universidade Federal de Alagoas (UFAL)
+
 Instituto de Computação (IC)
+
 Disciplina: Organização e Arquitetura de Computadores
+
 Professor: Lucas Amorim
     
 ## 🕹️ Jogo da Forca em Assembly ASCII
