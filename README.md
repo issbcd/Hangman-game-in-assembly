@@ -150,7 +150,7 @@ ld main.o -o forca
     </ol>
 
     <hr>
-    <p><em>Projeto desenvolvido para fins acadêmicos - UFAL IC 2026.</em></p>
+    <p><em>Projeto desenvolvido para fins acadêmicos - UFAL IC 2026.1.</em></p>
 
 </body>
 </html>
