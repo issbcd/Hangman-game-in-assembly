@@ -1,10 +1,9 @@
-🕹️ Jogo da Forca em Assembly ASCII
-
-    Universidade Federal de Alagoas (UFAL)
-    Instituto de Computação (IC)
-    Disciplina: Organização e Arquitetura de Computadores
-    Professor: Lucas Amorim
-    Ano: 2026 - Projeto Final
+Universidade Federal de Alagoas (UFAL)
+Instituto de Computação (IC)
+Disciplina: Organização e Arquitetura de Computadores
+Professor: Lucas Amorim
+    
+## 🕹️ Jogo da Forca em Assembly ASCII
 
 Este projeto consiste no desenvolvimento do clássico Jogo da Forca, implementado inteiramente em linguagem de baixo nível (Assembly). O jogo roda diretamente no terminal, utilizando a seção de dados para desenhar a interface e o boneco em arte ASCII.
 👥 Equipe de Desenvolvimento
