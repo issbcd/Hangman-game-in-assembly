@@ -32,20 +32,20 @@ gameLoop:
 
 
 checkLetter:
-    ; Boa prática: Salvar o estado dos registradores na pilha 
-    push esi
-    push edi
-    push eax
-    push ebx
-    push ecx
+    ; Em 64 bits, os pushes e pops DEVEM usar registradores de 64 bits (prefixo 'r')
+    push rsi
+    push rdi
+    push rax
+    push rbx
+    push rcx
 
-    ; Configuração dos "ponteiros"
-    mov esi, secretWord     ; esi aponta para a primeira letra da palavra secreta
-    mov edi, maskedWord     ; edi aponta para a primeira posição da máscara
+    ; Configuração dos "ponteiros" (agora usando rsi e rdi, de 64 bits)
+    mov rsi, secretWord     ; rsi aponta para a primeira letra da palavra secreta
+    mov rdi, maskedWord     ; rdi aponta para a primeira posição da máscara
     mov bl, 0               ; bl servirá como "marcador". 0 = não achou a letra, 1 = achou.
 
 .letterLoop:
-    mov cl, [esi]               ; Pega a letra atual da palavra secreta e guarda em cl
+    mov cl, [rsi]               ; Pega a letra atual usando o ponteiro de 64 bits
     
     cmp cl, 0                   ; Checa se chegou no fim da string
     je .breakLetterLoop         ; Se sim, sai do loop.
@@ -54,12 +54,12 @@ checkLetter:
     jne .nextLetter             ; Se não for, avança para a próxima letra da palavra
 
                                 ; Se chegou aqui, o usuário acertou uma letra!
-    mov [edi], al               ; Escreve a letra digitada (al) por cima do '_' na máscara (edi)
+    mov [rdi], al               ; Escreve a letra digitada (al) por cima do '_' na máscara (rdi)
     mov bl, 1                   ; Sinaliza no nosso marcador que houve um acerto
 
 .nextLetter:
-    inc esi                     ; avança o ponteiro da palavra secreta para a próxima letra
-    inc edi                     ; Avança o ponteiro da máscara também
+    inc rsi                     ; avança o ponteiro de 64 bits para a próxima letra
+    inc rdi                     ; Avança o ponteiro de 64 bits da máscara também
     jmp .letterLoop             ; Retorna o loop para analisar a próxima letra
 
 .breakLetterLoop:
@@ -73,23 +73,23 @@ checkLetter:
     mov [numLifes], bl          ; Salva de volta na memória
 
 .endFunction:
-    ; Restaura os registradores na ordem inversa que foram salvos
-    pop ecx
-    pop ebx
-    pop eax
-    pop edi
-    pop esi
+    ; Restaura os registradores na ordem inversa que foram salvos (usando 64 bits)
+    pop rcx
+    pop rbx
+    pop rax
+    pop rdi
+    pop rsi
     ret                        
 
 
 checkWin:
-    push esi
-    push eax
+    push rsi
+    push rax
 
-    mov esi, maskedWord ; Aponta para o começo da máscara
+    mov rsi, maskedWord ; Aponta para o começo da máscara usando rsi
 
 .underlineSearchLoop:
-    mov al, [esi]              ; Pega o caractere atual
+    mov al, [rsi]              ; Pega o caractere atual
     
     cmp al, 0                  ; Checa se chegou no fim da string
     je .declareVictory         ; Se chegou ao fim sem esbarrar em nenhum '_', o jogador venceu!
@@ -97,27 +97,27 @@ checkWin:
     cmp al, '_'                ; É um underline?
     je .stillMissingLetters    ; Se sim, interrompe a checagem, o jogo ainda não acabou.
     
-    inc esi                    ; Avança para a próxima letra
+    inc rsi                    ; Avança para a próxima letra
     jmp .underlineSearchLoop
 
 .declareVictory:
     mov byte [gameState], 1  ; Muda a variável global informando a vitória
     
 .stillMissingLetters:
-    pop eax
-    pop esi
+    pop rax
+    pop rsi
     ret
 
 
 checkLoss:
-    push eax
+    push rax
 
     mov al, [numLifes]         ; Lê a quantidade de vidas atual (numLifes)
     cmp al, 0                  ; Vidas == 0?
     jg .stillAlive             ; Vidas > 0, o jogo ainda não acabou.
 
-    mov byte [gameState], 2  ; Se chegou aqui, vidas é 0. Decreta a derrotaaa
+    mov byte [gameState], 2  ; Se chegou aqui, vidas é 0. Decreta a derrota.
 
 .stillAlive:
-    pop eax
+    pop rax
     ret
