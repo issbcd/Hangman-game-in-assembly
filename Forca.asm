@@ -1,13 +1,29 @@
 section .data
-    ; Variáveis de controle 
+    ; ADICIONADO: Exportando as variáveis para que o draw_hangman e banco_palavras consigam acessá-las
+    global numLifes       
+    global gameState
+
     numLifes db 6       ; 6 vidas: Cabeça, Torso, Braços e Pernas.
     gameState db 0      ; Rodando = 0, Vitória = 1, Derrota = 2
 
 section .text
 global _start
 
+; ====================================================================
+; ADICIONADO: Importando as funções e variáveis dos arquivos da equipe
+; ====================================================================
+extern drawHangman
+extern printWord
+extern getInput
+extern victoryScreen
+extern defeatScreen
+extern sortear_palavra
+extern secretWord
+extern maskedWord
+
 _start:
-    ; (Aqui ficaria a configuração inicial feita pela Pessoa 4)
+    ; Configuração inicial feita pela Pessoa 4
+    call sortear_palavra    ; ADICIONADO: Executa o sorteio e cria os underlines antes do jogo começar
 
 gameLoop:
     ; Funções para desenhar o jogo e obter input do usuário
