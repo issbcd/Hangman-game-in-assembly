@@ -9,11 +9,6 @@ Professor: Lucas Amorim
 ## 🕹️ Jogo da Forca em Assembly ASCII
 
 Este projeto consiste no desenvolvimento do clássico Jogo da Forca, implementado inteiramente em linguagem de baixo nível (Assembly). O jogo roda diretamente no terminal, utilizando a seção de dados para desenhar a interface e o boneco em arte ASCII.
-👥 Equipe de Desenvolvimento
-
-O projeto foi dividido em quatro frentes principais para garantir a modularidade do código e evitar conflitos nos registradores:
-
-    placeholder
 
 📂 Estrutura do Repositório
 
@@ -22,25 +17,30 @@ Plaintext
 
 forca-assembly/
 ├── src/                    # Código-fonte principal (.asm)
+
 │   ├── main.asm            # Arquivo de orquestração do jogo
+
 │   ├── io.asm              # Sub-rotinas de teclado e terminal
+
 │   ├── logic.asm           # Regras de acerto/erro e vidas
+
 │   └── ui.asm              # Motor de renderização ASCII
+
 ├── inc/                    # Arquivos de cabeçalho e dados (.inc)
+
 │   ├── constants.inc       # Macros do sistema (syscalls)
+
 │   └── data.inc            # Banco de palavras e sprites ASCII
+
 ├── Makefile                # Script de automação
+
 └── README.md               # Documentação principal
 
 ⚙️ Requisitos e Ferramentas
 
-    Arquitetura Alvo: [Inserir Arquitetura, ex: x86_64]
+    Arquitetura Alvo: x86_64
 
-    Sistema Operacional: [Inserir SO, ex: Linux Ubuntu]
-
-    Montador (Assembler): [Inserir Montador, ex: NASM]
-
-    Linker: GNU Linker (ld)
+    Sistema Operacional: Linux
 
 🚀 Como Compilar e Executar
 
@@ -73,6 +73,3 @@ make
 
     <hr>
     <p><em>Projeto desenvolvido para fins acadêmicos - UFAL IC 2026.1.</em></p>
-
-</body>
-</html>
