@@ -71,5 +71,4 @@ make
 
     O jogo se encerra ao descobrir a palavra inteira (Vitória) ou após completar o boneco com 6 erros (Derrota).
 
-    <hr>
-    <p><em>Projeto desenvolvido para fins acadêmicos - UFAL IC 2026.1.</em></p>
+    Projeto desenvolvido para fins acadêmicos - UFAL IC 2026.1.
