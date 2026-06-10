@@ -42,7 +42,7 @@ sortear_palavra:
     xor rdx, rdx            ; flags = 0
     syscall
 
-    cmp rax, 1              ; conseguiu ler 1 byte?
+    cmp rax, 1              ; ve se leu 1 byte
     jne .fallback_rdtsc
 
     movzx rax, byte [rel randomByte]
@@ -55,41 +55,41 @@ sortear_palavra:
 
 .numero_pronto:
     
-    xor rdx, rdx            ; Zera RDX (OBRIGATÓRIO ANTES DO DIV)
+    xor rdx, rdx            ; zera rdx (obrigado antes de div)
     mov rcx, qtd_palavras   ; rcx = 5
-    div rcx                 ; Divide RAX por 5. O RESTO vai para RDX (0 a 4).
+    div rcx                 ; Divide rax por 5. O resto vai para RDX (0 a 4).
 
     ; --- PREPARANDO PONTEIROS ---
     lea rbx, [rel banco_palavras]
-    mov rsi, [rbx + rdx*8]    ; RSI aponta para a palavra sorteada
+    mov rsi, [rbx + rdx*8]    ; rsi aponta para a palavra sorteada
 
-    lea rdi, [rel secretWord] ; RDI aponta para secretWord
-    lea r8, [rel maskedWord]  ; R8 aponta para maskedWord
+    lea rdi, [rel secretWord] ; rdi aponta para secretWord
+    lea r8, [rel maskedWord]  ; r8 aponta para maskedWord
 
 .loop_copia:
-    mov al, byte [rsi]      ; Lê a letra da palavra sorteada
-    cmp al, 0               ; Chegou no Null Terminator?
-    je .fim_copia           ; Se sim, acaba o loop
+    mov al, byte [rsi]      ; le a letra da palavra sorteada
+    cmp al, 0               ; ve chegou no null terminator
+    je .fim_copia           ; se sim, acaba o loop
 
-    ; Se não, copia a letra real e o underline
-    mov byte [rdi], al      ; secretWord recebe a letra (ex: 'C')
+    ; se nao copia a letra real e o underline
+    mov byte [rdi], al      ; secretWord recebe a letra 
     mov byte [r8], '_'      ; maskedWord recebe o underline '_'
 
-    ; Avança todos os ponteiros
+    ; avanca todos os ponteiros
     inc rsi
     inc rdi
     inc r8
     jmp .loop_copia
 
 .fim_copia:
-    ; REGRA RIGOROSA: Colocar o terminador 0 no final das duas strings
+    ; coloca o terminador 0 no final das strings
     mov byte [rdi], 0
     mov byte [r8], 0
 
-    ; Restaura os registradores na ordem inversa (LIFO)
+    ; restaura os registradores na ordem inversa
     pop r11
     pop r8
-    pop rdi
+    pop rdiz
     pop rsi
     pop rdx
     pop rcx
