@@ -88,7 +88,7 @@ sortear_palavra:
     ; restaura os registradores na ordem inversa
     pop r11
     pop r8
-    pop rdiz
+    pop rdi
     pop rsi
     pop rdx
     pop rcx
