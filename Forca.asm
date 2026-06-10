@@ -44,7 +44,6 @@ gameLoop:
     jmp defeatScreen        ; Se não, vai para a tela de derrota
 
 checkLetter:
-    ; Em 64 bits, os pushes e pops DEVEM usar registradores de 64 bits (prefixo 'r')
     push rsi
     push rdi
     push rax
