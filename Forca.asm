@@ -1,29 +1,26 @@
 section .data
-    ; ADICIONADO: Exportando as variáveis para que o draw_hangman e banco_palavras consigam acessá-las
-    global numLifes       
-    global gameState
-
-    numLifes db 6       ; 6 vidas: Cabeça, Torso, Braços e Pernas.
-    gameState db 0      ; Rodando = 0, Vitória = 1, Derrota = 2
+    global numLifes         ; global para o draw_hangman conseguir ler
+    global gameState    
+    
+    numLifes db 6           ; 6 vidas: Cabeça, Torso, Braços e Pernas.
+    gameState db 0          ; Rodando = 0, Vitória = 1, Derrota = 2
 
 section .text
-global _start
-
-; ====================================================================
-; ADICIONADO: Importando as funções e variáveis dos arquivos da equipe
-; ====================================================================
-extern drawHangman
-extern printWord
-extern getInput
-extern victoryScreen
-extern defeatScreen
-extern sortear_palavra
-extern secretWord
-extern maskedWord
+    global _start
+    
+    ; Importando tudo o que vem de outros arquivos
+    extern drawHangman
+    extern printWord
+    extern getInput
+    extern victoryScreen
+    extern defeatScreen
+    extern secretWord
+    extern maskedWord
+    extern sortear_palavra
 
 _start:
-    ; Configuração inicial feita pela Pessoa 4
-    call sortear_palavra    ; ADICIONADO: Executa o sorteio e cria os underlines antes do jogo começar
+    ; Sorteia e cria a máscara ANTES do jogo começar
+    call sortear_palavra
 
 gameLoop:
     ; Funções para desenhar o jogo e obter input do usuário
@@ -42,10 +39,9 @@ gameLoop:
     je gameLoop             ; Se sim, o loop continua 
 
     ; Se chegou aqui, o gameState != 0, o jogo terminou
-    cmp al, 1           ; "gameState == 1 (Vitoria)?"
-    je victoryScreen    ; Se sim, vai para a tela de vitória
-    jmp defeatScreen    ; Se não, vai para a tela de derrota
-
+    cmp al, 1               ; "gameState == 1 (Vitoria)?"
+    je victoryScreen        ; Se sim, vai para a tela de vitória
+    jmp defeatScreen        ; Se não, vai para a tela de derrota
 
 checkLetter:
     ; Em 64 bits, os pushes e pops DEVEM usar registradores de 64 bits (prefixo 'r')
@@ -55,13 +51,12 @@ checkLetter:
     push rbx
     push rcx
 
-    ; Configuração dos "ponteiros" (agora usando rsi e rdi, de 64 bits)
     mov rsi, secretWord     ; rsi aponta para a primeira letra da palavra secreta
     mov rdi, maskedWord     ; rdi aponta para a primeira posição da máscara
     mov bl, 0               ; bl servirá como "marcador". 0 = não achou a letra, 1 = achou.
 
 .letterLoop:
-    mov cl, [rsi]               ; Pega a letra atual usando o ponteiro de 64 bits
+    mov cl, [rsi]               ; Pega a letra atual
     
     cmp cl, 0                   ; Checa se chegou no fim da string
     je .breakLetterLoop         ; Se sim, sai do loop.
@@ -69,27 +64,24 @@ checkLetter:
     cmp cl, al                  ; Checa se a letra da palavra secreta (cl) é igual à letra digitada (al)
     jne .nextLetter             ; Se não for, avança para a próxima letra da palavra
 
-                                ; Se chegou aqui, o usuário acertou uma letra!
     mov [rdi], al               ; Escreve a letra digitada (al) por cima do '_' na máscara (rdi)
     mov bl, 1                   ; Sinaliza no nosso marcador que houve um acerto
 
 .nextLetter:
-    inc rsi                     ; avança o ponteiro de 64 bits para a próxima letra
-    inc rdi                     ; Avança o ponteiro de 64 bits da máscara também
+    inc rsi                     ; avança o ponteiro para a próxima letra
+    inc rdi                     ; Avança o ponteiro da máscara também
     jmp .letterLoop             ; Retorna o loop para analisar a próxima letra
 
 .breakLetterLoop:
-                                ; Verifica o marcador para saber se houve acerto ou erro
     cmp bl, 0                   ; "bl == 0?", errou no chute
     jne .endFunction            ; "bl != 0?", acertou o chute, retorna para o loop principal.
 
-                                ; Se chegou aqui, perdeu uma vida
     mov bl, [numLifes]          ; Pega a quantidade atual de vidas
     dec bl                      ; Subtrai 1
     mov [numLifes], bl          ; Salva de volta na memória
 
 .endFunction:
-    ; Restaura os registradores na ordem inversa que foram salvos (usando 64 bits)
+    ; Restaura os registradores na ordem inversa que foram salvos
     pop rcx
     pop rbx
     pop rax
@@ -97,12 +89,11 @@ checkLetter:
     pop rsi
     ret                        
 
-
 checkWin:
     push rsi
     push rax
 
-    mov rsi, maskedWord ; Aponta para o começo da máscara usando rsi
+    mov rsi, maskedWord         ; Aponta para o começo da máscara usando rsi
 
 .underlineSearchLoop:
     mov al, [rsi]              ; Pega o caractere atual
@@ -117,13 +108,12 @@ checkWin:
     jmp .underlineSearchLoop
 
 .declareVictory:
-    mov byte [gameState], 1  ; Muda a variável global informando a vitória
+    mov byte [gameState], 1    ; Muda a variável global informando a vitória
     
 .stillMissingLetters:
     pop rax
     pop rsi
     ret
-
 
 checkLoss:
     push rax
@@ -132,7 +122,7 @@ checkLoss:
     cmp al, 0                  ; Vidas == 0?
     jg .stillAlive             ; Vidas > 0, o jogo ainda não acabou.
 
-    mov byte [gameState], 2  ; Se chegou aqui, vidas é 0. Decreta a derrota.
+    mov byte [gameState], 2    ; Se chegou aqui, vidas é 0. Decreta a derrota.
 
 .stillAlive:
     pop rax
