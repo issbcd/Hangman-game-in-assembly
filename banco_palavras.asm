@@ -59,7 +59,6 @@ sortear_palavra:
     mov rcx, qtd_palavras   ; rcx = 5
     div rcx                 ; Divide rax por 5. O resto vai para RDX (0 a 4).
 
-    ; --- PREPARANDO PONTEIROS ---
     lea rbx, [rel banco_palavras]
     mov rsi, [rbx + rdx*8]    ; rsi aponta para a palavra sorteada
 
