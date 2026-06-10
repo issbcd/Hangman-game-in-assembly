@@ -1,34 +1,31 @@
 section .data
-    ; 1. Exportando variáveis para que main.asm e io.asm possam enxergar
+    ; exporta variaveis globais p outras func
     global secretWord
     global maskedWord
     global sortear_palavra
 
-    ; 2. Banco de palavras (todas terminadas em 0 obrigatoriamente)
-    ; Deixei todas em maiúsculo para padronizar com a entrada do usuário
+    ; palavras do banco de dados
     palavra1 db "computadores", 0
     palavra2 db "processador", 0
     palavra3 db "lucas", 0
     palavra4 db "arquitetura", 0
     palavra5 db "professor", 0
 
-    ; Array de ponteiros de 64 bits (dq = define quadword)
+    ;  array
     banco_palavras dq palavra1, palavra2, palavra3, palavra4, palavra5
     qtd_palavras equ 5
 
 section .bss
-    ; 3. Reservando espaço na memória para as variáveis que a Pessoa 2 exige
+    ; reserva espaco na memoria p as variaveis da pessoa 2
     secretWord resb 32
     maskedWord resb 32
     randomByte resb 1
 
 section .text
 
-;-------------------------------------------------------------------------
-; Função: sortear_palavra
-;-------------------------------------------------------------------------
+
 sortear_palavra:
-    ; Salva TODOS os registradores usados para não quebrar main.asm
+    ; salva todos os registradores usados para nao quebrar main
     push rax
     push rbx
     push rcx
@@ -38,7 +35,7 @@ sortear_palavra:
     push r8
     push r11
 
-    ; --- GERADOR ALEATÓRIO (Relógio do Sistema) ---
+    ; random generator
     mov rax, 318            ; syscall getrandom
     lea rdi, [rel randomByte]
     mov rsi, 1              ; le 1 byte aleatorio
